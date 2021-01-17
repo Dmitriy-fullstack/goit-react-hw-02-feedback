@@ -19,14 +19,28 @@ export default class Feedback extends Component {
     state = {
         good: 0,
         neutral: 0,
-        bad: 0
-      }
-
+        bad: 0,
+        total: 0,
+        goodFeedback: 0,
  
+      }
+    
+    
+    countTotalFeedback = () => {
+        this.setState(state => ({total: state.good + state.neutral + state.bad}))
+    }
+
+    countPositiveFeedbackPercentage = () => {
+        this.setState(state => ({goodFeedback: Math.round((state.good / state.total) * 100)}))
         
+    } 
+    
+
     onButtonClick = name => {
-    this.setState(state => ({[name]: state[name] + 1, notification: true,})
-    );
+    this.setState(state => ({[name]: state[name] + 1, notification: true}));
+    this.countTotalFeedback();
+    this.countPositiveFeedbackPercentage();
+     
     
 }
 
@@ -37,7 +51,8 @@ export default class Feedback extends Component {
                  <FeedbackOptions type="button" onLeaveFeedback={this.onButtonClick}/>
              </Section>
             <Section title='Statistics'>
-                {this.state.notification ? (<Statistics good={this.state.good} neutral={this.state.neutral} bad={this.state.bad}/>) : (<Notification message={this.props.message}/>)}
+                {this.state.notification ? (<Statistics good={this.state.good} neutral={this.state.neutral} bad={this.state.bad} total={this.state.total}
+            percentage={this.state.goodFeedback}/>) : (<Notification message={this.props.message}/>)}
             </Section>
             </>
         )
