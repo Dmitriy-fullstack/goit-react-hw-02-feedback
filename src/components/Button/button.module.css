@@ -1,4 +1,8 @@
-.Button {
-  border-radius: 3px;
+.button {
+  border-radius: 15px;
   text-align: center;
+  background-color: gray;
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 5px;
 }
