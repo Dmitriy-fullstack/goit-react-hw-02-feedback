@@ -20,39 +20,39 @@ export default class Feedback extends Component {
         good: 0,
         neutral: 0,
         bad: 0,
-        total: 0,
-        goodFeedback: 0,
- 
-      }
-    
-    
-    countTotalFeedback = () => {
-        this.setState(state => ({total: state.good + state.neutral + state.bad}))
     }
 
-    countPositiveFeedbackPercentage = () => {
-        this.setState(state => ({goodFeedback: Math.round((state.good / state.total) * 100)}))
+        
+    countTotalFeedback = () => {
+        return this.state.good + this.state.neutral + this.state.bad
+    }
+
+    countPositiveFeedbackPercentage = (total, good) => {
+        const positivePercentage= (good/total)*100;
+        return positivePercentage.toFixed();
+           
         
     } 
     
-
     onButtonClick = name => {
     this.setState(state => ({[name]: state[name] + 1, notification: true}));
-    this.countTotalFeedback();
-    this.countPositiveFeedbackPercentage();
+    
      
     
 }
 
     render() {
+        const total = this.countTotalFeedback();
+        const posPers = this.countPositiveFeedbackPercentage(total, this.state.good)
+        
         return (
             <>
              <Section title='Please leave feedback'>
                  <FeedbackOptions type="button" onLeaveFeedback={this.onButtonClick}/>
              </Section>
             <Section title='Statistics'>
-                {this.state.notification ? (<Statistics good={this.state.good} neutral={this.state.neutral} bad={this.state.bad} total={this.state.total}
-            percentage={this.state.goodFeedback}/>) : (<Notification message={this.props.message}/>)}
+                {this.state.notification ? (<Statistics good={this.state.good} neutral={this.state.neutral} bad={this.state.bad} total={total}
+            percentage={posPers}/>) : (<Notification message={this.props.message}/>)}
             </Section>
             </>
         )
